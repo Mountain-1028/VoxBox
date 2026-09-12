@@ -25,23 +25,28 @@
     },
     "win": {
       "target": [
-        "nsis"
+        "portable"
       ],
-      "icon": "icons/icon.ico"
+      "icon": "icons/icon.png"
     },
-    "mac": {
-      "target": [
-        "dmg"
-      ],
-      "icon": "icons/icon.icns"
+    "portable": {
+      "artifactName": "VoxBox.exe"
     },
     "files": [
       "main.js",
       "preload.js",
-      "src/**/*",
+      "tts_server.py",
+      "tts_core.py",
+      "requirements.txt",
+      "package.json",
       "ui/**/*",
-      "icons/**/*",
       "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "requirements.txt",
+        "to": "requirements.txt"
+      }
     ]
   }
 }

@@ -145,6 +145,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Settings modal
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeSettings = document.getElementById('close-settings');
+    const toggleVisibility = document.getElementById('toggle-visibility');
+    const sessionIdInput = document.getElementById('session-id-input');
+    const saveSettingsBtn = document.getElementById('save-settings');
+
+    settingsBtn.addEventListener('click', () => {
+        loadSettings();
+        settingsModal.classList.add('show');
+    });
+
+    closeSettings.addEventListener('click', () => {
+        settingsModal.classList.remove('show');
+    });
+
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.classList.remove('show');
+        }
+    });
+
+    toggleVisibility.addEventListener('click', () => {
+        if (sessionIdInput.type === 'password') {
+            sessionIdInput.type = 'text';
+            toggleVisibility.textContent = '🔒';
+        } else {
+            sessionIdInput.type = 'password';
+            toggleVisibility.textContent = '👁️';
+        }
+    });
+
+    saveSettingsBtn.addEventListener('click', async () => {
+        const sessionId = sessionIdInput.value.trim();
+        const success = await window.voxbox.saveSettings({ tiktokSessionId: sessionId });
+        if (success) {
+            showStatus('Settings saved! TikTok voices will use this session ID.', 'success');
+            settingsModal.classList.remove('show');
+        } else {
+            showStatus('Failed to save settings.', 'error');
+        }
+    });
+
+    async function loadSettings() {
+        try {
+            const settings = await window.voxbox.getSettings();
+            sessionIdInput.value = (settings && settings.tiktokSessionId) || '';
+        } catch (error) {
+            console.error('Error loading settings:', error);
+        }
+    }
+
     // Initialize
     loadVoices();
 });

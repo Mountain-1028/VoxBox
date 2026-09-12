@@ -81,7 +81,14 @@ ipcMain.handle('generate-tts', async (event, text, voice, outputName) => {
         
         const command = `python "${serverPath}" generate "${text}" "${voice}" "${outputPath}"`;
         
-        exec(command, (error, stdout, stderr) => {
+        // Inject TikTok session ID from settings into environment
+        const settings = loadSettings();
+        const env = { ...process.env };
+        if (settings.tiktokSessionId) {
+            env.TIKTOK_SESSION_ID = settings.tiktokSessionId;
+        }
+        
+        exec(command, { env }, (error, stdout, stderr) => {
             if (error) {
                 reject(new Error(`Failed to generate TTS: ${error.message}\n${stderr}`));
                 return;
@@ -103,4 +110,41 @@ ipcMain.handle('generate-tts', async (event, text, voice, outputName) => {
             }
         });
     });
+});
+
+// Settings file path
+const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+
+function loadSettings() {
+    try {
+        if (fs.existsSync(settingsPath)) {
+            const data = fs.readFileSync(settingsPath, 'utf8');
+            return JSON.parse(data);
+        }
+    } catch (error) {
+        console.error('Error loading settings:', error);
+    }
+    return {};
+}
+
+function saveSettings(settings) {
+    try {
+        const dir = path.dirname(settingsPath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf8');
+        return true;
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        return false;
+    }
+}
+
+ipcMain.handle('get-settings', async () => {
+    return loadSettings();
+});
+
+ipcMain.handle('save-settings', async (event, settings) => {
+    return saveSettings(settings);
 });
