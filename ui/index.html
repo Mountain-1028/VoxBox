@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxBox</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="40" height="40" rx="8" fill="url(#gradient)"/>
+                    <path d="M20 10L15 25H25L20 10Z" fill="white"/>
+                    <path d="M20 30L25 15H15L20 30Z" fill="white" opacity="0.7"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#8B5CF6"/>
+                            <stop offset="100%" stop-color="#EC4899"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>VoxBox</h1>
+            </div>
+            <p class="tagline">TikTok & Edge voices for your content</p>
+        </header>
+
+        <div class="main-content">
+            <div class="input-section">
+                <label for="text-input">Text to speak</label>
+                <textarea id="text-input" placeholder="Enter your text here..." rows="8"></textarea>
+                <div class="char-count">
+                    <span id="char-count">0</span> characters
+                </div>
+            </div>
+
+            <div class="voice-section">
+                <label>Select voice</label>
+                <div class="voice-tabs">
+                    <button class="tab-btn active" data-tab="tiktok">TikTok</button>
+                    <button class="tab-btn" data-tab="edge">Edge TTS</button>
+                </div>
+
+                <div id="tiktok-voices" class="voice-grid"></div>
+                <div id="edge-voices" class="voice-grid" style="display: none;"></div>
+            </div>
+
+            <div class="controls">
+                <button id="generate-btn" class="btn btn-primary">
+                    <span class="btn-text">Generate</span>
+                    <span class="btn-loader" style="display: none;">Generating...</span>
+                </button>
+                <button id="play-btn" class="btn btn-secondary" disabled>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3 3L12 8L3 13V3Z"/>
+                    </svg>
+                    Play
+                </button>
+                <button id="download-btn" class="btn btn-tertiary" disabled>
+                    Download
+                </button>
+            </div>
+
+            <div id="status" class="status"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
